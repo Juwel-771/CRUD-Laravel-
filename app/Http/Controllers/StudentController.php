@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class StudentController extends Controller
 {
     /**
@@ -13,7 +13,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $data = DB::table('students')->get();
+        return view('home',['data'=>$data]);
     }
 
     /**
@@ -21,9 +22,16 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        DB::table('students')->insert([
+            'name'=>$request->name,
+            'city'=>$request->city,
+            'passing_year'=>$request->passing_year,
+            'marks'=>$request->marks,
+        ]);
+
+        return redirect(route('index'))->with('message','Data Inserted');
     }
 
     /**
@@ -56,7 +64,8 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        //
+        $student = DB::table('students')->find($id);
+        return view('editform',['student'=>$student]);
     }
 
     /**
@@ -68,7 +77,14 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        DB::table('students')->where('id',$id)->update([
+            'name'=>$request->name,
+            'city'=>$request->city,
+            'passing_year'=>$request->passing_year,
+            'marks'=>$request->marks,
+        ]);
+
+        return redirect(route('index'))->with('message','Data Updated');
     }
 
     /**
@@ -79,6 +95,7 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table('students')->where('id',$id)->delete();
+        return redirect(route('index'))->with('message','Data Deleted');   
     }
 }

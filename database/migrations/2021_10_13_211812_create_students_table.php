@@ -17,7 +17,7 @@ class CreateStudentsTable extends Migration
             $table->id();
             $table->string('name');  
             $table->string('city');  
-            $table->string('passing year');  
+            $table->string('passing_year');  
             $table->bigInteger('marks');  
             $table->timestamps();
         });
